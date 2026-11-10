@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101827"><title>InDrive Assistant</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101827;color:#f8fafc;font:16px system-ui;padding:22px}.wrap{max-width:520px;margin:auto}h1{font-size:27px;margin:6px 0}p{color:#aab6c8}.card{background:#1c293b;padding:18px;border-radius:16px;margin:16px 0}label{display:block;color:#cbd5e1;font-size:14px;margin:12px 0 5px}input{width:100%;padding:13px;border-radius:10px;border:1px solid #46566d;background:#0f1928;color:white;font-size:17px}button{width:100%;border:0;border-radius:11px;padding:15px;background:#39c77a;color:#062313;font-weight:800;font-size:17px;margin-top:18px}.result{font-size:22px;font-weight:800;margin-top:12px}.small{font-size:13px;color:#9caec4}
+</style></head><body><main class="wrap"><h1>🚗 InDrive Assistant</h1><p>Calcula si una oferta te deja ganancia. No se conecta ni controla inDrive.</p>
+<section class="card"><h2>Analizar carrera</h2>
+<label>Precio ofrecido (S/)</label><input id="price" type="number" min="0" step=".5" placeholder="Ej. 18">
+<label>Distancia total estimada (km, incluye retorno vacío)</label><input id="km" type="number" min="0" step=".1" placeholder="Ej. 12">
+<label>Rendimiento del auto (km por litro de GLP)</label><input id="eff" type="number" min=".1" step=".1" value="9">
+<label>Precio del GLP (S/ por litro)</label><input id="fuel" type="number" min="0" step=".01" placeholder="Ingresa tu precio">
+<label>Otros costos por carrera (S/)</label><input id="other" type="number" min="0" step=".5" value="1">
+<button onclick="calc()">CALCULAR RENTABILIDAD</button><div id="out" class="result" aria-live="polite"></div><p id="detail" class="small"></p></section>
+<p class="small">Estimación orientativa: considera también tiempo, tráfico, peajes y retorno vacío. No se conecta ni automatiza inDrive.</p></main>
+<script>
+function calc(){
+ const p=+document.getElementById('price').value,k=+document.getElementById('km').value,e=+document.getElementById('eff').value,f=+document.getElementById('fuel').value,o=+document.getElementById('other').value;
+ const out=document.getElementById('out'),detail=document.getElementById('detail');
+ if(!(p>0&&k>0&&e>0&&f>0)){out.textContent="Completa precio, distancia, rendimiento y GLP.";detail.textContent="";return;}
+ const gas=k/e*f,cost=gas+o,net=p-cost,per=net/k;
+ out.textContent=(net>=0?"Ganancia estimada: S/ ":"Pérdida estimada: S/ ")+Math.abs(net).toFixed(2);
+ detail.textContent="Combustible: S/ "+gas.toFixed(2)+" · Otros costos: S/ "+o.toFixed(2)+" · Neto por km: S/ "+per.toFixed(2)+".";
+}
+</script></body></html>
